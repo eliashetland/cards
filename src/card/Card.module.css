@@ -1,0 +1,13 @@
+.card {
+  height: 100%;
+  box-sizing: border-box;
+  transform-origin: bottom center; /* Transform origin for scaling */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensures the image covers the card area */
+}

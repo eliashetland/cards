@@ -1,0 +1,16 @@
+.container {
+  container-type: size;
+  --aspect-ratio: 3 / 5;
+}
+
+.aspectBox {
+  aspect-ratio: var(--aspect-ratio);
+  height: 100%;
+  width: unset;
+}
+@container (aspect-ratio <= var(--aspect-ratio)) {
+  .stack {
+    width: 100%;
+    height: unset;
+  }
+}
