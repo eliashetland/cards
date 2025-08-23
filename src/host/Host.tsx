@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
 import type { ICard } from "../card/ICard";
-import styles from "./Host.module.css";
 import { Board } from "./board/Board";
 import { Waiting } from "./waiting/Waiting";
+import { GameOver } from "./gameOver/GameOver";
 
 interface IHostProps {
   currentRoom: string;
   maxPlayers: number;
 }
 
-type GameStatus = "waiting" | "started" | "finished";
+export type GameStatus = "waiting" | "started" | "finished";
 
 export interface IGameUpdate {
   playerName: string;
@@ -20,6 +20,13 @@ export interface IGameUpdate {
   status: GameStatus;
 }
 
+export interface IPlayer {
+  name: string;
+  score: number;
+  savedCards: ICard[];
+  position: number;
+}
+
 export const Host = (props: IHostProps) => {
   const [players, setPlayers] = useState<string[]>([]);
   const [cards, setCards] = useState<ICard[]>([]);
@@ -27,23 +34,29 @@ export const Host = (props: IHostProps) => {
   const [playerTurn, setPlayerTurn] = useState<string>();
   const [status, setStatus] = useState<GameStatus>("waiting");
   const [round, setRound] = useState<number>(0);
+  const [gameFinishedData, setGameFinishedData] = useState<IPlayer[] | null>(null);
 
   useEffect(() => {
     socket.on("gameUpdate", (data: IGameUpdate) => {
       console.log("Game update:", data);
 
-      if (data.playedCards) {
-        if (data.playedCards.length === 1) {
-          setCards((prevCards) => {
-            const updated = [...prevCards, data.playedCards[0]];
-            return updated.slice(-3); // keep only the last 3
-          });
-        }
-        if (data.playedCards.length === 2) {
-          setDiscardPile((prevCards) => {
-            const updated = [...prevCards, ...data.playedCards];
-            return updated.slice(-3); // keep only the last 3
-          });
+      if (data.playedCards && data.round === 1) {
+        setCards(data.playedCards);
+        setRound(1);
+      } else {
+        if (data.playedCards) {
+          if (data.playedCards.length === 1) {
+            setCards((prevCards) => {
+              const updated = [...prevCards, data.playedCards[0]];
+              return updated.slice(-3); // keep only the last 3
+            });
+          }
+          if (data.playedCards.length === 2) {
+            setDiscardPile((prevCards) => {
+              const updated = [...prevCards, ...data.playedCards];
+              return updated.slice(-3); // keep only the last 3
+            });
+          }
         }
       }
 
@@ -52,7 +65,7 @@ export const Host = (props: IHostProps) => {
       }
 
       if (data.status) setStatus(data.status);
-      if (data.round && data.round !== round) {
+      if (data.round && data.round !== round && data.round !== 1) {
         // new round started
         setCards([]);
         setDiscardPile([]);
@@ -60,8 +73,24 @@ export const Host = (props: IHostProps) => {
       }
     });
 
+    socket.on("host_round1", (data: { cards: ICard[] }) => {
+      setCards(data.cards);
+      setRound(1);
+    });
+
+    socket.on("host_gameFinished", (data) => {
+      setStatus("finished");
+      setPlayerTurn(undefined);
+      setCards([]);
+      setDiscardPile([]);
+      setRound(0);
+      setGameFinishedData(data.players);
+    });
+
     return () => {
       socket.off("gameUpdate");
+      socket.off("host_round1");
+      socket.off("host_gameFinished");
     };
   }, []);
 
@@ -84,24 +113,6 @@ export const Host = (props: IHostProps) => {
       />
     );
   } else if (status === "finished") {
-    return (
-      <div className={styles.board}>
-        <h1>Game Over</h1>
-        <p>Current Room: {props.currentRoom}</p>
-        <h2>Final Players:</h2>
-        <ul>
-          {players.map((player, index) => (
-            <li key={index}>{player}</li>
-          ))}
-        </ul>
-        <button
-          onClick={() =>
-            socket.emit("resetGame", { gameId: props.currentRoom })
-          }
-        >
-          Reset Game
-        </button>
-      </div>
-    );
+    return <GameOver players={gameFinishedData || []} />;
   }
 };

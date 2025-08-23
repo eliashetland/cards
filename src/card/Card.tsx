@@ -6,7 +6,15 @@ interface ICardProps {
 }
 
 export const Card = (props: ICardProps) => {
-  const cardSvg = "/svg-cards/" + props.card.rank + "_" + props.card.suit + ".svg";
+  if (!props.card) {
+    return (
+      <div className={styles.card}>
+        <div className={styles.emptyCard} />
+      </div>
+    );
+  }
+  const cardSvg =
+    "/svg-cards/" + props.card.rank + "_" + props.card.suit + ".svg";
 
   return (
     <div className={styles.card}>

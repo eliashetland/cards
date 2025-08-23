@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #2061ed;
+  overflow: hidden;
+}
+
+.content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 1000px;
+
+  height: 95%;
+  gap: 1rem;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.results {
+  overflow: auto;
+  height: 100%;
+}
+
+.score {
+  width: 100%;
+}
+
+.playerPosition {
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 2rem;
+  text-align: center;
+  color: #2061ed;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 0.5rem ;
+}
+
+th {
+  text-align: left;
+}
+
+.cardList {
+  display: flex;
+  gap: 0.5rem;
+  height: 80px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  list-style-type: none;
+}
+
+.cardItem {
+  aspect-ratio: 3/5;
+  height: 100%;
+}
