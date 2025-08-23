@@ -127,19 +127,17 @@ export const Client = (props: IClientProps) => {
 
   if (round === 1) {
     return (
-      <div className={styles.container}>
-        <LastRoundControls
-          currentRoom={props.currentRoom}
-          error={error}
-          setError={setError}
-          playerTurn={playerTurn}
-          myTurn={myTurn}
-          keepCard={handleKeepCard}
-          revealNewCard={handleRevealNewCard}
-          savedCards={savedCards}
-          name={props.name}
-        />
-      </div>
+      <LastRoundControls
+        currentRoom={props.currentRoom}
+        error={error}
+        setError={setError}
+        playerTurn={playerTurn}
+        myTurn={myTurn}
+        keepCard={handleKeepCard}
+        revealNewCard={handleRevealNewCard}
+        savedCards={savedCards}
+        name={props.name}
+      />
     );
   }
 

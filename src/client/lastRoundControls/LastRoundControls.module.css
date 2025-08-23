@@ -2,10 +2,18 @@
   display: grid;
   grid-template-rows: auto 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  height: 100%;
   padding: 0.5rem;
   gap: 0.5rem;
+
+  height: 100dvh;
+  width: 100dvw;
+  background-color: #0a2924;
+  color: white;
+  overflow: hidden;
 }
+
+
+
 
 .infoRow1 {
   grid-row: 1;

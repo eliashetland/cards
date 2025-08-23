@@ -16,7 +16,7 @@ export type userType = "host" | "client";
 export const StartPage = (props: IStartPageProps) => {
   const [gameId, setGameId] = useState<string>("");
   const [maxPlayers, setMaxPlayers] = useState<number>(4);
-  const [userType, setUserType] = useState<userType>("host");
+  const [userType, setUserType] = useState<userType>("client");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -72,7 +72,6 @@ export const StartPage = (props: IStartPageProps) => {
 
   return (
     <div className={styles.container}>
-      <h2>I am a:</h2>
       <form className={styles.form}>
         <div className={styles.radioGroup}>
           <input

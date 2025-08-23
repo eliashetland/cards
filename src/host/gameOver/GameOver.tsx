@@ -23,7 +23,7 @@ export const GameOver = (props: IGameOverProps) => {
             </thead>
             <tbody>
               {props.players
-                .sort((a, b) => b.score - a.score)
+                .sort((a, b) => a.score - b.score)
 
                 .map((player) => (
                   <tr
