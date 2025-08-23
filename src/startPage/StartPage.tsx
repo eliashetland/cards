@@ -61,7 +61,7 @@ export const StartPage = (props: IStartPageProps) => {
   // Emit an event to create a game
   const handleCreateGame = (e: React.FormEvent) => {
     e.preventDefault();
-    socket.emit("host_createGame", { gameId, maxPlayers, numberOfRounds: 2 });
+    socket.emit("host_createGame", { gameId, maxPlayers, numberOfRounds: 10 });
   };
 
   // Emit an event to join a game with the provided game ID
